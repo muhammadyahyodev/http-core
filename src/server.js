@@ -7,7 +7,7 @@ const host = "localhost";
 const port = 8080;
 
 // checking connection with database
-(async () => {
+;(async () => {
   try {
     await client.connect();
     console.log('Connected to PostgreSQL database');
