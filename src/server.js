@@ -1,5 +1,6 @@
 const http = require('http');
-const client = require('./db/connect');
+const client = require('./config/database/connect');
+const runMigrations = require('./config/database/migrations');
 
 const { getAllProducts, createProduct,  } = require('./services/product.service');
 
@@ -10,6 +11,7 @@ const port = 8080;
 ;(async () => {
   try {
     await client.connect();
+    // await runMigrations();
     console.log('Connected to PostgreSQL database');
   } catch (error) {
     console.error('Error connecting to PostgreSQL database:', error.message);

@@ -1,7 +1,7 @@
 // const createNewObjectBook = require("../helpers/createnewObjectbook");
 const getBodyData = require("../helpers/getBodyData");
 const InternalError = require("../errors/internal.error");
-const pool = require("../db/connect");
+const pool = require("../config/database/connect");
 
 //error handlers
 const NotFoundError = require("../errors/notFound.error");
@@ -9,10 +9,8 @@ const ValidationError = require("../errors/validation.error");
 
 async function getAllProducts(req, res) {
   try {
-    console.log(pool);
     const results = await new Promise((resolve, reject) => {
       pool.query('SELECT * FROM product',(error, results) => {
-        console.log(error);
         if(error) {
             console.log("if error: ", error);
           reject(error);
@@ -53,12 +51,12 @@ async function createProduct(req, res) {
       const query = 'INSERT INTO product(title, description) VALUES($1, $2)';
       
       const new_product = await new Promise((resolve, reject) => {
-        pool.query(query, title, description, (error, result) => {
+        pool.query(query, [title, description], (error, result) => {
           if (error) {
-            console.log(error);
+            console.log("error if: " ,error);
             reject(error);
           } else {
-            console.log(result);
+            console.log("error else: ", result);
             resolve(result);
           }
         });
@@ -75,7 +73,7 @@ async function createProduct(req, res) {
 
       res.end(JSON.stringify(resp));
     } catch (error) {
-      console.log(error);
+      console.log("INTERNAL ERROR: ", error);
       InternalError(res);
     }
   }
