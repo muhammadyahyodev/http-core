@@ -1,5 +1,6 @@
 const http = require('http');
 const client = require('./config/database/connect');
+const run = require('./config/database/migrations');
 
 const {
   getAllProducts,
@@ -8,6 +9,7 @@ const {
   updateProductById,
   deleteProductById,
 } = require('./services/product.service');
+const { registration } = require('./services/user.service');
 
 const host = "localhost";
 const port = 8080;
@@ -16,6 +18,7 @@ const port = 8080;
 ;(async () => {
   try {
     await client.connect();
+    run();
     console.log('Connected to PostgreSQL database');
   } catch (error) {
     console.error('Error connecting to PostgreSQL database:', error.message);
@@ -37,6 +40,9 @@ const server = http.createServer(async (req, res) => {
   } else
   if (req.url.match(/\/products\/\w+/) && req.method === "DELETE") {
     deleteProductById(req, res);
+  } else
+  if (req.url === "/user/registration" && req.method === "POST") {
+    registration(req, res);
   } else {
     res.writeHead(404, {
       "Content-type": "application/json charset utf-8",

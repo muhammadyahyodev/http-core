@@ -31,4 +31,4 @@ async function runMigrations() {
     }
 }
 
-runMigrations();
+module.exports = runMigrations;
