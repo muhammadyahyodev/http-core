@@ -5,7 +5,7 @@ function validationError(res) {
 
     const resp = {
         status: 400,
-        message: 'Give correct data to create product'
+        message: 'Validation Error! Give correct data to registrate'
     };
 
     res.end(JSON.stringify(resp));
