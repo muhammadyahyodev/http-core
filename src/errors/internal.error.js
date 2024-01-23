@@ -5,7 +5,7 @@ function InternalError(res) {
 
     const resp = {
         status: 502,
-        message: "Error! Internal Server Error!"
+        message: error.message,
     }
     
     res.end(JSON.stringify(resp));

@@ -9,7 +9,7 @@ const {
   updateProductById,
   deleteProductById,
 } = require('./services/product.service');
-const { registration } = require('./services/user.service');
+const { registration, getAllUsers } = require('./services/user.service');
 
 const host = "localhost";
 const port = 8080;
@@ -43,6 +43,9 @@ const server = http.createServer(async (req, res) => {
   } else
   if (req.url === "/user/registration" && req.method === "POST") {
     registration(req, res);
+  } else
+  if (req.url === "/users" && req.method === "GET") {
+    getAllUsers(req, res);
   } else {
     res.writeHead(404, {
       "Content-type": "application/json charset utf-8",

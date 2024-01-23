@@ -44,10 +44,29 @@ async function registration(req, res) {
             .writeHead(201, { "Content-type":"application/json" })
             .end(JSON.stringify(response));
     } catch (error) {
-        InternalError(res);
+        InternalError(res, error);
+    }
+}
+
+async function getAllUsers(req, res) {
+    try {
+        const query = 'SELECT * FROM users';
+        const users = await new Promise((resolve, reject) => {
+            pool.query(query, (error, result) => {
+                if (error) reject(error);
+                else resolve(result);
+            });
+        });
+
+        return res
+            .writeHead(200, { "Content-type": "application/json" })
+            .end(JSON.stringify(users.rows));
+    } catch (error) {
+        InternalError(res, error);
     }
 }
 
 module.exports = {
     registration,
+    getAllUsers,
 }
