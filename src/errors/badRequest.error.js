@@ -1,14 +1,12 @@
-function BadRequest(res) {
-    res.writeHead(400, {
-        "Content-type":"application/json"
-    })
-
+function BadRequest(res, message = "Bad Request") {
     const resp = {
         status: 400,
-        message: "Bad Request! Give correct data"
-    }
+        message: message,
+    };
     
-    res.end(JSON.stringify(resp));
+    res
+        .writeHead(400, { "Content-type":"application/json" })
+        .end(JSON.stringify(resp));
 };
 
 module.exports = BadRequest;

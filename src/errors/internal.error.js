@@ -1,14 +1,12 @@
-function InternalError(res) {
-    res.writeHead(502,{
-        "Content-type":"application/json"
-    })
-
+function InternalError(res, message = "Internal Error") {
     const resp = {
         status: 502,
-        message: error.message,
-    }
+        message: message,
+    };
     
-    res.end(JSON.stringify(resp));
+    res
+        .writeHead(502, { "Content-type":"application/json" })
+        .end(JSON.stringify(resp));
 };
 
 module.exports = InternalError;

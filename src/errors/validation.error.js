@@ -1,14 +1,12 @@
-function validationError(res) {
-    res.writeHead(400, {
-        'Content-type': 'application/json'
-    });
-
+function validationError(res, message = "Validation Error") {
     const resp = {
         status: 400,
-        message: 'Validation Error! Give correct data to registrate'
+        message: message,
     };
 
-    res.end(JSON.stringify(resp));
+    res
+        .writeHead(400, { 'Content-type': 'application/json' })
+        .end(JSON.stringify(resp));
 }
 
 module.exports = validationError;
