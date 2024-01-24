@@ -1,7 +1,7 @@
 function InternalError(res, message = "Internal Error") {
     const resp = {
         status: 502,
-        message: message,
+        message: message.message,
     };
     
     res
