@@ -2,6 +2,7 @@ const pool = require("../config/database/connect");
 const getBodyData = require("../helpers/getBodyData");
 const jwt = require('../jwt/jwtService');
 const bcrypt = require('bcryptjs');
+const cookie = require('cookie');
 const dotenv = require('dotenv');
 dotenv.config();
 // error handlers
@@ -144,15 +145,24 @@ async function login(req, res) {
 
 async function logout(req, res) {
     try {
-        const id = req.url.split('/')[3];
+        const { token } = cookie.parse(req.headers.cookie || "");
+        if (!token) {
+            return ValidationError(res, "Validation Error! Jwt Expired");
+        };
 
-        const query = 'UPDATE users SET token=$1 WHERE id=$2';
-        await new Promise((resolve, reject) => {
-            pool.query(query, [ null, id ], (error, result) => {
+        const rToken = await jwt.verifyAccess(token);
+
+        const query = 'UPDATE users SET token=$1, is_active=$2 WHERE id=$3 RETURNING *';
+        const logout = await new Promise((resolve, reject) => {
+            pool.query(query, [ null, false, rToken.id ], (error, result) => {
                 if (error) reject(error);
                 else resolve(result);                      
             });
         });
+
+        if (!logout.rows.length) {
+            return ValidationError(res, "Canceled, operation does not finished");
+        };
         
         const response = { status: "DONE" };
         return res
@@ -161,8 +171,8 @@ async function logout(req, res) {
             .end(JSON.stringify(response));
     } catch (error) {
         return InternalError(res, error);
-    }
-}
+    };
+};
 
 async function getAllUsers(req, res) {
     try {

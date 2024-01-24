@@ -56,7 +56,7 @@ const server = http.createServer(async (req, res) => {
   if (req.url.match(/\/users\/\w+/) && req.method === "DELETE") {
     deleteUserById(req, res);
   } else
-  if (req.url.match(/\/user\/logout\/\w+/) && req.method === "POST") {
+  if (req.url === "/user/logout" && req.method === "POST") {
     logout(req, res);
   }  else {
     res.writeHead(404, {
